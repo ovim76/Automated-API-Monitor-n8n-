@@ -1,0 +1,177 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -448,
+        0
+      ],
+      "id": "77c9f4fb-4b4e-4baf-a357-09f84cf737df",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://jsonplaceholder.typicode.com/posts/1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -256,
+        0
+      ],
+      "id": "e411cb3a-75c3-47c4-a42e-a9db3f3fc61f",
+      "name": "HTTP Request",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "fromEmail": "ovidium28@yahoo.com",
+        "toEmail": "ovidium28@yahoo.com",
+        "subject": "⚠️ ALERTĂ: API-ul nu răspunde corect",
+        "html": "= <h2>⚠️ Verificarea API a eșuat</h2>\n   <p>Adresa testată nu a întors un răspuns valid.</p>\n   <p>Detalii: {{ JSON.stringify($json) }}</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        16,
+        32
+      ],
+      "id": "810845be-bfa6-485f-b944-e7ac35689424",
+      "name": "Send an Email",
+      "webhookId": "7e0455e6-4f8c-44a4-be1c-b4106403414a",
+      "credentials": {
+        "smtp": {
+          "id": "xtLaZC57BgVm67KD",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e24f3e85-834c-4553-a54e-9c61220833a4",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": 2,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -48,
+        -96
+      ],
+      "id": "88626a56-e085-46f0-8f5d-d2c206a13092",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "fromEmail": "ovidium28@yahoo.com",
+        "toEmail": "ovidium28@yahoo.com",
+        "subject": "⚠️ ALERTĂ: conținut API neașteptat",
+        "html": "=<h2>⚠️ Aserțiunea de conținut a eșuat</h2>\n   <p>API-ul a răspuns cu succes, dar conținutul nu e cel așteptat.</p>\n   <p>Răspuns primit: {{ JSON.stringify($json) }}</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        -64
+      ],
+      "id": "7e1b7a61-1c7c-4280-bc52-8a684b94f8e6",
+      "name": "Send an Email1",
+      "webhookId": "7af1a50f-452b-45aa-9690-3532f039b6e5",
+      "credentials": {
+        "smtp": {
+          "id": "xtLaZC57BgVm67KD",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send an Email1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c731811f-da4b-4652-805e-6d95e756814c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cdd7b0fb74d6303ba2f62e7828d91ec75a6df0fd68ba3f1aa575ced743117daf"
+  },
+  "nodeGroups": [],
+  "id": "RulVhtrZDx0qkWQk",
+  "tags": []
+}
